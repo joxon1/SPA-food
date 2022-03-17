@@ -7,6 +7,10 @@ export default function Retcipe() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const [retsipe, setRetsipe] = useState([]);
+  const [showRetsipe, setShowRetcipe] = useState(false);
+  const handleRetcipe = () => {
+    setShowRetcipe(!showRetsipe);
+  };
   useEffect(() => {
     getMealsById(id).then((data) => setRetsipe(data.meals[0]));
   }, []);
@@ -32,27 +36,31 @@ export default function Retcipe() {
             </h6>
           ) : null}
           <p>{retsipe.strInstructions}</p>
-
-          <table className="centred">
-            <thead>
-              <tr>
-                <th>Ingredient</th>
-                <th>Measure</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(retsipe).map((key) => {
-                if (key.includes("Ingredient") && retsipe[key]) {
-                  return (
-                    <tr>
-                      <td>{retsipe[key]}</td>
-                      <td>{retsipe[`strMeasure${key.slice(13)}`]}</td>
-                    </tr>
-                  );
-                }
-              })}
-            </tbody>
-          </table>
+          <button onClick={handleRetcipe} className="btn">
+            Show Retcipe
+          </button>
+          {showRetsipe ? (
+            <table className="centred">
+              <thead>
+                <tr>
+                  <th>Ingredient</th>
+                  <th>Measure</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(retsipe).map((key) => {
+                  if (key.includes("Ingredient") && retsipe[key]) {
+                    return (
+                      <tr>
+                        <td>{retsipe[key]}</td>
+                        <td>{retsipe[`strMeasure${key.slice(13)}`]}</td>
+                      </tr>
+                    );
+                  }
+                })}
+              </tbody>
+            </table>
+          ) : null}
 
           {retsipe.strYoutube ? (
             <div className="row">
